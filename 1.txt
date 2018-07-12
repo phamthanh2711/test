@@ -1,5 +1,2 @@
-<<<<<<< HEAD
-Fix bug on 1.txt
-=======
 Update new content to file
->>>>>>> alpha
+
