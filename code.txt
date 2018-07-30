@@ -1,0 +1,53 @@
+// select data theo trang va so ban ghi trong trang
+USE [cosodulieu]
+GO
+
+DECLARE @PageSize INT =10, @PageNum INT=1
+
+SELECT * 
+FROM(
+	SELECT *, ROW_NUMBER() OVER(ORDER BY id desc) RN FROM customer
+) a
+WHERE RN BETWEEN (@PageNum-1)*@PageSize+1 AND @PageNum*@PageSize
+ORDER BY id desc
+GO
+
+// insert vao table theo so luong ban ghi tuy chon
+
+USE [cosodulieu]
+GO
+DECLARE @num INT = 1 ;
+DECLARE @str nvarchar(10) = '' ;
+
+DELETE FROM [dbo].[customer]
+
+While(@num<99)
+Begin
+if (Len(@num)=1) set @str='MH00000'+ CONVERT(nvarchar(10),@num);
+if (Len(@num)=2) set @str='MH0000'+ CONVERT(nvarchar(10),@num);
+if (Len(@num)=3) set @str='MH000'+ CONVERT(nvarchar(10),@num);
+if (Len(@num)=4) set @str='MH00'+ CONVERT(nvarchar(10),@num);
+if (Len(@num)=5) set @str='MH0'+ CONVERT(nvarchar(10),@num);
+if (Len(@num)=6) set @str='MH'+ CONVERT(nvarchar(10),@num);
+
+INSERT INTO [dbo].[customer]
+           ([id]
+           ,[name]
+           ,[birth]
+           ,[gender]
+           ,[phone]
+           ,[email]
+           ,[address]
+           ,[hidden])
+     VALUES
+           (@str,
+            N'Pham Thanh',
+            N'27/11/1994',
+            N'Male',
+            N'01648093848',
+            N'thanh@gmail.com',
+            N'Hai An, Ðang Hai, Hai Phòng',
+            N'false')
+	set @num=@num+1;
+End
+GO
